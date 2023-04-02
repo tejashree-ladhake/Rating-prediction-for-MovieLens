@@ -1,0 +1,27 @@
+name: Test MSDS630 hw1
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up python 3
+      uses: actions/setup-python@v2
+    - name: Install libs
+      run: |
+        pip install pytest
+        pip install numpy
+        pip install pandas
+        pip install scipy
+    - name: Test with pytest
+      run: |
+        pytest test_tiny.py

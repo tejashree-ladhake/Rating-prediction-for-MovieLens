@@ -1,17 +1,36 @@
 # Movie rating prediction
 
+# **Collaborative Filtering**
+
+Collaborative filtering techniques are used to make recommendations based on user preferences and behavior. Collaborative filtering algorithms can be divided into two categories: memory-based and model-based. Memory-based algorithms use the entire dataset to generate recommendations, while model-based algorithms use a subset of the data to create a model that can be used to make predictions. Some of the most popular collaborative filtering algorithms include user-based collaborative filtering, item-based collaborative filtering, matrix factorization, and deep learning.
+
+User-based collaborative filtering is a technique that recommends items based on the preferences of similar users. Item-based collaborative filtering is a technique that recommends items based on their similarity to items that a user has already rated. Matrix factorization is a technique that decomposes a large matrix into two smaller matrices that can be used to make predictions. Deep learning is a technique that uses neural networks to learn complex patterns in data.
+
+# **Matrix factorization algorithm for collaborative filtering**
+
 Matrix Factorization is a technique that decomposes a large matrix into two smaller matrices, one representing the users and the other representing the items. By multiplying these two matrices, we can reconstruct the original matrix and fill in the missing values. This way, we can predict how a user would rate an item that they have not seen before.
 
-To demonstrate this technique, I have used the MovieLens data set, which contains 100k ratings from 943 users on 1682 movies. The ratings range from 1 to 5 stars. The data set can be downloaded from [https://grouplens.org/datasets/movielens/100k/](https://grouplens.org/datasets/movielens/100k/).
+# Dataset
+
+I built a collaborative filtering model to predict ratings that MovieLens users give to movies. I have used a dataset with 100836 ratings, 610 users, and 9724 movies.
+
+Data can be downloaded using this command line:
+
+```python
+wget http://files.grouplens.org/datasets/movielens/ml-latest-small.zip
+```
 
 The steps to build and train the Matrix Factorization model are as follows:
 
 # 1. Encoding rating data
 
-The first step is to encode the rating data into a sparse matrix, where each row represents a user and each column represents a movie. The matrix elements are the ratings given by the users to the movies. If a user has not rated a movie, the element is zero.
+**Why we need to encode the data?**
 
-Encoding is done for the rating data with continous user and movie ids using
-the helpful [fast.ai](http://fast.ai/) function from above where a pandas column is encoded with values between 0 and n-1. where n = number of unique values
+Collaborative filtering is a technique for building recommender systems that use the ratings or preferences of users to predict what they might like. One of the challenges of collaborative filtering is that the user and item ids are often not continuous integers, but rather strings or other types of identifiers. This makes it difficult to use them as indices for matrices or tensors. To solve this problem, we need to encode the user and item ids into continuous integers that range from 0 to n-1, where n is the number of unique values.
+
+To do this, I will use a simple function from the [fast.ai](http://fast.ai/) library called proc_col. This function takes a pandas column as input and returns a dictionary that maps each unique value to an integer, an array that contains the encoded values, and the number of unique values. For example, if we have a column with values ['a', 'b', 'c', 'a', 'b'], proc_col will return ({'a': 0, 'b': 1, 'c': 2}, [0, 1, 2, 0, 1], 3).
+
+The first step is to encode the rating data into a sparse matrix, where each row represents a user and each column represents a movie. The matrix elements are the ratings given by the users to the movies. If a user has not rated a movie, the element is zero.
 
 ```python
 def proc_col(col):
